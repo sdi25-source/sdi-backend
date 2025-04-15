@@ -159,7 +159,9 @@ public class UserService {
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+
+        String password = user.getLogin() + "123";
+        String encryptedPassword = passwordEncoder.encode(password);
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
@@ -177,8 +179,11 @@ public class UserService {
         userRepository.save(user);
         this.clearUserCaches(user);
         LOG.debug("Created Information for User: {}", user);
+        LOG.debug("User login: {}", user.getLogin());
+        LOG.debug("User password: {}", password);
         return user;
     }
+
 
     /**
      * Update all information for a specific user, and return the modified user.
